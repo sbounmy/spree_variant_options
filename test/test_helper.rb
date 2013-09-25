@@ -12,6 +12,8 @@ begin; require "debugger"; rescue LoadError; end
 begin; require "turn"; rescue LoadError; end
 
 require 'spree/testing_support/factories'
+require 'spree/testing_support/preferences'
+
 
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
@@ -23,6 +25,8 @@ class ActionDispatch::IntegrationTest
   # Make the Capybara DSL available in all integration tests
   include Capybara::DSL
   include Spree::UrlHelpers
+
+  include Spree::TestingSupport::Preferences
 
   # Stop ActiveRecord from wrapping tests in transactions
   self.use_transactional_fixtures = true
