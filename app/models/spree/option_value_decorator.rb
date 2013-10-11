@@ -1,6 +1,7 @@
 Spree::OptionValue.class_eval do
 
-  attr_accessible :image
+  attr_accessible :image, :color
+  serialize :metadata, Hash
 
   has_attached_file :image,
     :styles        => { :small => '40x30#', :large => '140x110#' },
@@ -18,4 +19,12 @@ Spree::OptionValue.class_eval do
   }
 
   scope :order_by_positions, joins(:option_type).order("#{Spree::OptionType.quoted_table_name}.position asc, #{quoted_table_name}.position asc")
+
+  def color=(value)
+    self.metadata[:color] = value if not value.blank?
+  end
+
+  def color
+    self.metadata[:color]
+  end 
 end

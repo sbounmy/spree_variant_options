@@ -252,3 +252,4 @@ function VariantOptions(params) {
   $(document).ready(init);
 
 };
+
