@@ -1,8 +1,7 @@
 Spree::OptionValue.class_eval do
 
-  attr_accessible :image
-
-  default_scope order("#{quoted_table_name}.position")
+  attr_accessible :image, :color
+  serialize :metadata, Hash
 
   has_attached_file :image,
     :styles        => { :small => '40x30#', :large => '140x110#' },
@@ -14,6 +13,18 @@ Spree::OptionValue.class_eval do
     image_file_name && !image_file_name.empty?
   end
 
-  scope :for_product, lambda { |product| select("DISTINCT #{table_name}.*").where("spree_option_values_variants.variant_id IN (?)", product.variant_ids).joins(:variants)
+  scope :for_product, lambda { |product|
+    uniq.where("spree_option_values_variants.variant_id IN (?)", product.variant_ids)
+    .joins(:variants).order_by_positions
   }
+
+  scope :order_by_positions, joins(:option_type).order("#{Spree::OptionType.quoted_table_name}.position asc, #{quoted_table_name}.position asc")
+
+  def color=(value)
+    self.metadata[:color] = value if not value.blank?
+  end
+
+  def color
+    self.metadata[:color]
+  end 
 end

@@ -1,11 +1,11 @@
 #product-details .price.unselected {
-  color: #bbb;  
+  color: #bbb;
 }
 .variant-option-type {
   margin-bottom: 0;
 }
 #product-variants ul.variant-option-values {
-  list-style-type: none;  
+  list-style-type: none;
   margin-bottom: 1em;
 }
 .variant-option-values li {
@@ -16,7 +16,7 @@
 .variant-option-values li a {
   display: block;
   background-color: #f9f9f9;
-  border: 2px solid #eee;  
+  border: 2px solid #eee;
   padding: 2px 9px;
   margin: 3px 3px 0 0;
   text-decoration: none;
@@ -30,18 +30,19 @@
   float: none;
   clear: both;
 }
-li.clear-option a.clear-button {
+
+div.variant-options a.clear-button {
   display: none;
   font-weight: bold;
   background-color: #fff;
   border-color: #FDE2E2;
   color: #c00e0e;
+  vertical-align: middle;
+  margin-left: 5px;
+  line-height: normal;
+  font-size: 12px;
 }
-li.clear-option a.clear-button:hover {
-  border-color: #c00e0e;
-  background-color: #EF2E2E;
-  color: #fff;
-}
+
 .option-value.selected,
 .option-value.in-stock:hover {
   background-color: #1491EB;
@@ -56,7 +57,7 @@ li.clear-option a.clear-button:hover {
 }
 .option-value.locked,
 .option-value.locked:hover {
-  background-color: #fff;  
+  background-color: #fff;
   border-color: #f0f0f0;
   color: #ddd;
   cursor: default;
@@ -66,4 +67,24 @@ li.clear-option a.clear-button:hover {
   -moz-opacity:0.5;
   -khtml-opacity: 0.5;
   opacity: 0.5;
+}
+
+h6.variant-option-type strong.selection {
+  vertical-align: middle;
+  color: #1491EB;
+}
+
+h6.variant-option-type strong.selection.out-of-stock {
+  background: none;
+  text-decoration: line-through;
+  cursor: default;
+}
+
+.variant-option-type label {
+  display: inline-block;
+}
+
+.option-value.in-stock.with-color { 
+    width: 25px;
+    height: 25px;
 }

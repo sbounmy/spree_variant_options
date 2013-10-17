@@ -33,6 +33,7 @@ if (!Array.find_matches) Array.find_matches = function(a) {
 function VariantOptions(params) {
 
   var options = params['options'];
+  var i18n = params['i18n'];
   var allow_backorders = !params['track_inventory_levels'] ||  params['allow_backorders'];
   var allow_select_outofstock = params['allow_select_outofstock'];
   var default_instock = params['default_instock'];
@@ -48,7 +49,7 @@ function VariantOptions(params) {
     update();
     enable(parent.find('a.option-value'));
     toggle();
-    $('.clear-option a.clear-button').hide().click(handle_clear);
+    $('div.variant-options a.clear-button').hide().click(handle_clear);
 
     if (default_instock) {
       divs.each(function(){
@@ -107,11 +108,13 @@ function VariantOptions(params) {
         disable($(element).addClass('unavailable locked').unbind('click'));
       } else if (keys.length == 1) {
         _var = variants[keys[0]];
-        $(element).addClass((allow_backorders || _var.count) ? selection.length == 1 ? 'in-stock auto-click' : 'in-stock' : 'out-of-stock');
+        $(element).addClass((allow_backorders || _var.count || _var.on_demand) ? selection.length == 1 ? 'in-stock auto-click' : 'in-stock' : 'out-of-stock');
       } else if (allow_backorders) {
         $(element).addClass('in-stock');
       } else {
-        $.each(variants, function(key, value) { count += value.count });
+        $.each(variants, function(key, value) {
+          count += value.on_demand ? 1 : value.count
+        });
         $(element).addClass(count ? 'in-stock' : 'out-of-stock');
       }
     });
@@ -149,9 +152,11 @@ function VariantOptions(params) {
   }
 
   function to_f(string) {
-    return parseFloat(string.replace(/[^\d\.]/g, ''));
+    return string ? parseFloat(string.replace(/[^\d\.]/g, '')) : 0;
   }
 
+  // Find matching variants for selected option value
+  // Set price or price range if matching variants have different prices.
   function find_variant() {
     var selected = divs.find('a.selected');
     var variants = get_variant_objects(selected.get(0).rel);
@@ -176,7 +181,7 @@ function VariantOptions(params) {
     if (variant) {
       $('#variant_id, form[data-form-type="variant"] input[name$="[variant_id]"]').val(variant.id);
       $('#product-price .price').removeClass('unselected').text(variant.price);
-      if (variant.count > 0 || allow_backorders)
+      if (variant.count > 0 || variant.on_demand || allow_backorders)
         $('#cart-form button[type=submit]').attr('disabled', false).fadeTo(100, 1);
       $('form[data-form-type="variant"] button[type=submit]').attr('disabled', false).fadeTo(100, 1);
       try {
@@ -203,7 +208,9 @@ function VariantOptions(params) {
     parent.nextAll().each(function(index, element) {
       disable($(element).find('a.option-value').show().removeClass('in-stock out-of-stock').addClass('locked').unbind('click'));
       $(element).find('a.clear-button').hide();
+      $(element).find('h6 strong.selection').html('').removeClass('out-of-stock');
     });
+    parent.find('strong.selection').html('').removeClass('out-of-stock');
     show_all_variant_images();
   }
 
@@ -223,13 +230,26 @@ function VariantOptions(params) {
     }
     disable(buttons);
     var a = enable(a.addClass('selected'));
-    parent.find('a.clear-button').css('display', 'block');
+    parent.find('a.clear-button').css('display', 'inline-block');
     advance();
+    handle_selected();
     if (find_variant()) {
       toggle();
     }
   }
 
+  function handle_selected() {
+    var selected = divs.find('a.selected');
+    selected.each(function(){
+      $this = $(this)
+      var selection = $this.parents('.variant-options').find('h6 strong.selection')
+      selection.html($this.attr('title'));
+
+      if ($this.hasClass('out-of-stock'))
+        selection.addClass('out-of-stock').attr('title', i18n.out_of_stock);
+    });
+  };
   $(document).ready(init);
 
 };
+
