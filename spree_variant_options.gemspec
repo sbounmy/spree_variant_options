@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
   s.add_dependency('spree_api', '~> 2.0')
   s.add_dependency('spree_frontend', '~> 2.0')
   s.add_dependency('spree_backend',  '~> 2.0')
+  s.add_dependency('spectrum-rails')
 
   # Development
   s.add_development_dependency('spree_sample',     '~> 2.0')
