@@ -24,9 +24,3 @@ Deface::Override.new(:virtual_path   => "spree/admin/option_types/edit",
                        "data-sortable-link" => "/admin/option_values/update_positions"
                      },
                      :disabled       => false)
-
-Deface::Override.new(:virtual_path => "spree/products/_cart_form",
-                     :name => "products_css_variants_options",
-                     :replace => '.variant-option-values',
-                     :partial => "spree/products/css_variant_options",
-                     :disabled => false)
