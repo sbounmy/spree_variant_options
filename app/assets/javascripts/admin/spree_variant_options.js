@@ -3,7 +3,7 @@
 $(document).ready(function(){
 
   $(".colorpick").spectrum({
-  color: "#000000",
+  color: "",
       showInput: true,
       className: "full-spectrum",
       showInitial: true,
@@ -29,5 +29,10 @@ $(document).ready(function(){
           "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)",
           "rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
       ]
+  });
+  var value = $(".colorpick").val();
+
+  $(".colorpick").on('change', function() {
+    $(this).val(value)
   });
 });
