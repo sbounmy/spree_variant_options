@@ -21,10 +21,12 @@ Spree::OptionValue.class_eval do
   scope :order_by_positions, joins(:option_type).order("#{Spree::OptionType.quoted_table_name}.position asc, #{quoted_table_name}.position asc")
 
   def color=(value)
-    self.metadata[:color] = value if not value.blank?
+    if not value.blank?
+      write_attribute :metadata, metadata.merge(color: value)
+    end
   end
 
   def color
-    self.metadata[:color]
-  end 
+    metadata[:color]
+  end
 end
